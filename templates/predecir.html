@@ -6,7 +6,12 @@
 <body>
     <h1>Chart de la Predicción</h1>
     <img src="data:image/png;base64,{{ file_contents }}" alt="My Chart">
+    
+    <blockquote >
+        <h4>el error cuadrático medio es: {{ mse }}</h4>
+        <p>El MSE solo te proporciona una medida de la calidad de ajuste del modelo a los datos.</p>
+    </blockquote >
+    
     <a class="text-white" href="{{ url_for('index') }}">Volver</a>
-    <p>el índice es {{_mse}}</p>
 </body>
 </html>

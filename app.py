@@ -12,7 +12,6 @@ from sklearn.metrics import mean_squared_error
 
 # App init
 app = Flask(__name__)
-_mse = 0
 
 # Index
 @app.route('/')
@@ -28,14 +27,18 @@ def predecir():
     M2 = request.form['M2']
     M3 = request.form['M3']
     M4 = request.form['M4']
-    chart = prediction(valor, periodo, M1, M2, M3, M4)
+    prediction = predict(valor, periodo, M1, M2, M3, M4)
 
-    return render_template('predecir.html', file_contents=chart, mse=_mse)
+    return render_template('predecir.html', file_contents=prediction[0], mse=prediction[1])
 
-def prediction(valor, periodo, media1, media2, media3, media4):
+# Chart de ejempo
+@app.route('/chart')
+def chart():
+    return render_template('chart.html')
+
+def predict(valor, periodo, media1, media2, media3, media4):
     fileName = getDataExtension(valor)
     periodo = int(periodo)
-    
     data = pd.read_csv('datos/' + fileName)
 
     # Variables predictoras
@@ -60,7 +63,8 @@ def prediction(valor, periodo, media1, media2, media3, media4):
     prediction = regressor.predict(X_test)
 
     # Evaluar precision del modelo
-    getMSE(Y_test, prediction)
+    _mse = mean_squared_error(Y_test, prediction)
+    print('Error cuadrático medio: ', _mse)
 
     # Obtener datos del ultimo tiempo
     last_data = data.tail(periodo)
@@ -84,7 +88,7 @@ def prediction(valor, periodo, media1, media2, media3, media4):
     # encode imagen a base64
     chart = base64.b64encode(img.read()).decode('utf-8')
 
-    return chart
+    return chart, _mse
 
 def getDataExtension(valor):
     if valor == 'GOOGLE':
@@ -94,10 +98,6 @@ def getDataExtension(valor):
     elif valor =='META':
         return 'Meta-2012-2022.csv'
     else : None
-
-def getMSE(Y_test, prediction):
-    _mse = mean_squared_error(Y_test, prediction)
-    print('Error cuadrático medio: ', _mse)
-
+    
 if __name__ == '__main__':
     app.run(debug=True)
