@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Flask Calculator Result</title>
+    <title>Software II</title>
 </head>
 <body>
-    <h1>My Chart</h1>
+    <h1>Chart de la Predicción</h1>
     <img src="data:image/png;base64,{{ file_contents }}" alt="My Chart">
+    <a class="text-white" href="{{ url_for('index') }}">Volver</a>
+    <p>el índice es {{_mse}}</p>
 </body>
 </html>
