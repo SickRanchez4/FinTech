@@ -30,7 +30,7 @@ def predecir():
     M4 = request.form['M4']
     prediction = predict(valor, periodo, M1, M2, M3, M4)
 
-    return render_template('predecir.html', file_contents=prediction[0], mse=prediction[1])
+    return render_template('predecir.html', movements=prediction[0], mse=prediction[1], prizes=prediction[2])
 
 # Chart
 @app.route('/chart')
@@ -90,7 +90,20 @@ def predict(valor, periodo, media1, media2, media3, media4):
     # encode imagen a base64
     chart = base64.b64encode(img.read()).decode('utf-8')
 
-    return chart, _mse
+    # chart 2
+    plt.clf()
+    plt.scatter(Y_test, prediction, alpha=0.5)
+    plt.plot([Y_test.min(), Y_test.max()], [Y_test.min(), Y_test.max()], 'k--', lw=2)
+    plt.xlabel('Valor real')
+    plt.ylabel('Valor predicho')
+
+    img2 = io.BytesIO()
+    plt.savefig(img2, format='png')
+    img2.seek(0)
+
+    chart2 = base64.b64encode(img2.read()).decode('utf-8')
+
+    return chart, _mse, chart2
 
 def getDataExtension(valor):
     if valor == 'GOOGLE':

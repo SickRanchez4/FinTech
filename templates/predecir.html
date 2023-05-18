@@ -15,7 +15,7 @@
 </head>
 <body>
     <h1>Chart de la Predicción</h1>
-    <img src="data:image/png;base64,{{ file_contents }}" alt="My Chart">
+    <img src="data:image/png;base64,{{ movements }}" alt="My Chart">
     
     <div class ="custom-div">
         <h4>el error cuadrático medio es: {{ mse }}</h4>
@@ -23,6 +23,9 @@
     </div >
     <div>
         <a href="{{ url_for('index') }}">Volver</a>
+    </div>
+    <div>
+        <img src="data:image/png;base64,{{ prizes }}" alt="My Chart">
     </div>
 </body>
 </html>
