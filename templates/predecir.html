@@ -2,16 +2,27 @@
 <html>
 <head>
     <title>Software II</title>
+    <style>
+        .custom-div {
+          background-color: #f2f2f2;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+          border: 1px solid #d9d9d9;
+          border-color: #e6e6e6;
+          padding: 20px;
+          margin: 5px;
+        }
+      </style>
 </head>
 <body>
     <h1>Chart de la Predicción</h1>
     <img src="data:image/png;base64,{{ file_contents }}" alt="My Chart">
     
-    <blockquote >
+    <div class ="custom-div">
         <h4>el error cuadrático medio es: {{ mse }}</h4>
         <p>El MSE solo te proporciona una medida de la calidad de ajuste del modelo a los datos.</p>
-    </blockquote >
-    
-    <a class="text-white" href="{{ url_for('index') }}">Volver</a>
+    </div >
+    <div>
+        <a href="{{ url_for('index') }}">Volver</a>
+    </div>
 </body>
 </html>

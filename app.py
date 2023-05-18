@@ -3,6 +3,7 @@ import base64
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib.pyplot as plt
+import yfinance as yf
 
 from flask import Flask, render_template, request, Response
 from sklearn.model_selection import train_test_split
@@ -31,15 +32,15 @@ def predecir():
 
     return render_template('predecir.html', file_contents=prediction[0], mse=prediction[1])
 
-# Chart de ejempo
+# Chart
 @app.route('/chart')
 def chart():
     return render_template('chart.html')
 
 def predict(valor, periodo, media1, media2, media3, media4):
-    fileName = getDataExtension(valor)
+    stockName = getDataExtension(valor)
+    data = yf.download(stockName, start='2012-01-01', end='2022-01-01')
     periodo = int(periodo)
-    data = pd.read_csv('datos/' + fileName)
 
     # Variables predictoras
     data['SMA_10'] = data['Close'].rolling(window=int(media1)).mean()
@@ -64,6 +65,7 @@ def predict(valor, periodo, media1, media2, media3, media4):
 
     # Evaluar precision del modelo
     _mse = mean_squared_error(Y_test, prediction)
+    _mse = round(_mse, 2)
     print('Error cuadrático medio: ', _mse)
 
     # Obtener datos del ultimo tiempo
@@ -92,11 +94,11 @@ def predict(valor, periodo, media1, media2, media3, media4):
 
 def getDataExtension(valor):
     if valor == 'GOOGLE':
-        return 'Google-2012-2022.csv'
+        return 'GOOG'
     elif valor =='MCDONALD':
-        return 'Mcdonald-2012-2022.csv'
+        return 'MCD'
     elif valor =='META':
-        return 'Meta-2012-2022.csv'
+        return 'META'
     else : None
     
 if __name__ == '__main__':
